@@ -1,8 +1,8 @@
 <?php
-$host   = 'bupf2j2tw3yoqw67ttoo-mysql.services.clever-cloud.com';
-$dbname = 'bupf2j2tw3yoqw67ttoo';
-$dbuser = 'ummednqxhyr8zmkr';
-$dbpass = 'gep9TH7GUgO1bezkVs62';
+$host   = getenv('DB_HOST')   ?: 'bupf2j2tw3yoqw67ttoo-mysql.services.clever-cloud.com';
+$dbname = getenv('DB_NAME')   ?: 'bupf2j2tw3yoqw67ttoo';
+$dbuser = getenv('DB_USER')   ?: 'ummednqxhyr8zmkr';
+$dbpass = getenv('DB_PASS')   ?: 'gep9TH7GUgO1bezkVs62';
 
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $dbuser, $dbpass);

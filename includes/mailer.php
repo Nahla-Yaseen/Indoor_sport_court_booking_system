@@ -224,14 +224,14 @@ function sendBookingConfirmationEmail(string $toEmail, string $toName, array $bk
     // ── Send via PHPMailer ───────────────────────────────────────────────────
     $mail = new PHPMailer(true);
     $mail->isSMTP();
-    $mail->Host       = 'smtp.gmail.com';
+    $mail->Host       = getenv('MAIL_HOST')    ?: 'smtp.gmail.com';
     $mail->SMTPAuth   = true;
-    $mail->Username   = 'mohamedysn130@gmail.com';
-    $mail->Password   = 'bccadmctjoixahpj';
+    $mail->Username   = getenv('MAIL_USERNAME') ?: 'mohamedysn130@gmail.com';
+    $mail->Password   = getenv('MAIL_PASSWORD') ?: 'bccadmctjoixahpj';
     $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
     $mail->Port       = 587;
 
-    $mail->setFrom('mohamedysn130@gmail.com', 'Adam Indoors');
+    $mail->setFrom(getenv('MAIL_USERNAME') ?: 'mohamedysn130@gmail.com', 'Adam Indoors');
     $mail->addAddress($toEmail, $toName);
     $mail->isHTML(true);
     $mail->Subject = 'Booking Confirmation – Adam Indoors #' . intval($bk['id']);
@@ -394,14 +394,14 @@ function sendBookingCancellationEmail(string $toEmail, string $toName, array $bk
     // ── Send via PHPMailer ───────────────────────────────────────────────────
     $mail = new PHPMailer(true);
     $mail->isSMTP();
-    $mail->Host       = 'smtp.gmail.com';
+    $mail->Host       = getenv('MAIL_HOST')     ?: 'smtp.gmail.com';
     $mail->SMTPAuth   = true;
-    $mail->Username   = 'mohamedysn130@gmail.com';
-    $mail->Password   = 'bccadmctjoixahpj';
+    $mail->Username   = getenv('MAIL_USERNAME')  ?: 'mohamedysn130@gmail.com';
+    $mail->Password   = getenv('MAIL_PASSWORD')  ?: 'bccadmctjoixahpj';
     $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
     $mail->Port       = 587;
 
-    $mail->setFrom('mohamedysn130@gmail.com', 'Adam Indoors');
+    $mail->setFrom(getenv('MAIL_USERNAME') ?: 'mohamedysn130@gmail.com', 'Adam Indoors');
     $mail->addAddress($toEmail, $toName);
     $mail->isHTML(true);
     $mail->Subject = 'Booking Cancelled – Adam Indoors #' . intval($bk['id']);
