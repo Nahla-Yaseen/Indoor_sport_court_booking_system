@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION['user_id'])) {
-    header("Location: /myproject/login.php"); exit();
+    header("Location: /login.php"); exit();
 }
 require_once __DIR__ . '/config/payhere-config.php';
 
@@ -9,7 +9,7 @@ require_once __DIR__ . '/includes/db.php';
 
 $booking_id       = intval($_GET['booking_id']       ?? 0);
 $coach_booking_id = intval($_GET['coach_booking_id'] ?? 0);
-if (!$booking_id) { header("Location: /myproject/my-bookings.php"); exit(); }
+if (!$booking_id) { header("Location: /my-bookings.php"); exit(); }
 
 // Load court booking
 $stmt = $pdo->prepare("
@@ -20,7 +20,7 @@ $stmt = $pdo->prepare("
 ");
 $stmt->execute([$booking_id, $_SESSION['user_id']]);
 $booking = $stmt->fetch();
-if (!$booking) { header("Location: /myproject/my-bookings.php"); exit(); }
+if (!$booking) { header("Location: /my-bookings.php"); exit(); }
 
 // Load coach booking if exists via URL param
 $coachBooking = null;
@@ -52,7 +52,7 @@ if (!$coachBooking) {
 // Block re-payment if already paid
 $already = $pdo->prepare("SELECT id FROM payments WHERE booking_id=? AND status='Paid'");
 $already->execute([$booking_id]);
-if ($already->fetch()) { header("Location: /myproject/my-bookings.php"); exit(); }
+if ($already->fetch()) { header("Location: /my-bookings.php"); exit(); }
 
 // Calculate prices
 $courtPrice  = floatval($booking['total_price']);
@@ -202,7 +202,7 @@ if ($totalAmount <= 0) {
     // Mark the wallet credit as Used in pending_transactions
     markWalletCreditUsed($pdo, $_SESSION['user_id'], $booking_id, $creditApplied);
     
-    header("Location: /myproject/payment-return.php?order_id=".urlencode($order_id));
+    header("Location: /payment-return.php?order_id=".urlencode($order_id));
     exit();
 }
 
@@ -235,7 +235,7 @@ $slots   = json_decode($booking['selected_slots'] ?? '[]', true);
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Payment – Adam Indoors</title>
-  <link rel="stylesheet" href="/myproject/css/style.css"/>
+  <link rel="stylesheet" href="/css/style.css"/>
   <style>
     .pay-wrap { max-width:540px; margin:0 auto; padding:24px 16px 40px; }
     .pay-summary {
@@ -311,13 +311,13 @@ $slots   = json_decode($booking['selected_slots'] ?? '[]', true);
       <div><strong><?= htmlspecialchars($user['name']) ?></strong><small>Member</small></div>
     </div>
     <div class="usb-section">Menu</div>
-    <a href="/myproject/dashboard.php"         class="usb-link"><span class="usb-icon-sm">📊</span> Dashboard</a>
-    <a href="/myproject/about.php"             class="usb-link"><span class="usb-icon-sm">ℹ️</span> About Us</a>
-    <a href="/myproject/my-bookings.php"       class="usb-link"><span class="usb-icon-sm">📋</span> My Bookings</a>
-    <a href="/myproject/coaches.php"           class="usb-link"><span class="usb-icon-sm">🎽</span> Coaches</a>
-    <a href="/myproject/my-coach-bookings.php" class="usb-link"><span class="usb-icon-sm">📝</span> My Coach Bookings</a>
+    <a href="/dashboard.php"         class="usb-link"><span class="usb-icon-sm">📊</span> Dashboard</a>
+    <a href="/about.php"             class="usb-link"><span class="usb-icon-sm">ℹ️</span> About Us</a>
+    <a href="/my-bookings.php"       class="usb-link"><span class="usb-icon-sm">📋</span> My Bookings</a>
+    <a href="/coaches.php"           class="usb-link"><span class="usb-icon-sm">🎽</span> Coaches</a>
+    <a href="/my-coach-bookings.php" class="usb-link"><span class="usb-icon-sm">📝</span> My Coach Bookings</a>
     <div class="usb-section">Account</div>
-    <a href="/myproject/logout.php" class="usb-link logout-link"><span class="usb-icon-sm">🚪</span> Logout</a>
+    <a href="/logout.php" class="usb-link logout-link"><span class="usb-icon-sm">🚪</span> Logout</a>
     <div class="usb-bottom">© 2025 Adam Indoors</div>
   </div>
 
@@ -467,7 +467,7 @@ $slots   = json_decode($booking['selected_slots'] ?? '[]', true);
         </div>
 
         <div style="text-align:center;margin-top:16px;">
-          <a href="/myproject/my-bookings.php"
+          <a href="/my-bookings.php"
              style="font-size:12px;color:var(--text-muted);">
             ← Cancel and go back to My Bookings
           </a>

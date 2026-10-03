@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION['user_id'])) {
-    header("Location: /myproject/login.php"); exit();
+    header("Location: /login.php"); exit();
 }
 require_once __DIR__ . '/includes/db.php';
 
@@ -14,7 +14,7 @@ $initial = strtoupper(substr($_SESSION['name'], 0, 1));
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Dashboard – Adam Indoors</title>
-  <link rel="stylesheet" href="/myproject/css/style.css"/>
+  <link rel="stylesheet" href="/css/style.css"/>
 </head>
 <body>
 <div class="user-wrapper">
@@ -36,23 +36,23 @@ $initial = strtoupper(substr($_SESSION['name'], 0, 1));
       </div>
     </div>
     <div class="usb-section">Menu</div>
-    <a href="/myproject/dashboard.php"         class="usb-link active">
+    <a href="/dashboard.php"         class="usb-link active">
       <span class="usb-icon-sm">📊</span> Dashboard
     </a>
-    <a href="/myproject/about.php"             class="usb-link">
+    <a href="/about.php"             class="usb-link">
       <span class="usb-icon-sm">ℹ️</span> About Us
     </a>
-    <a href="/myproject/my-bookings.php"       class="usb-link">
+    <a href="/my-bookings.php"       class="usb-link">
       <span class="usb-icon-sm">📋</span> My Bookings
     </a>
-    <a href="/myproject/coaches.php"           class="usb-link">
+    <a href="/coaches.php"           class="usb-link">
       <span class="usb-icon-sm">🎽</span> Coaches
     </a>
-    <a href="/myproject/my-coach-bookings.php" class="usb-link">
+    <a href="/my-coach-bookings.php" class="usb-link">
       <span class="usb-icon-sm">📝</span> My Coach Bookings
     </a>
     <div class="usb-section">Account</div>
-    <a href="/myproject/logout.php" class="usb-link logout-link">
+    <a href="/logout.php" class="usb-link logout-link">
       <span class="usb-icon-sm">🚪</span> Logout
     </a>
     <div class="usb-bottom">© 2025 Adam Indoors</div>
@@ -92,12 +92,12 @@ $initial = strtoupper(substr($_SESSION['name'], 0, 1));
             $i++;
             $imgFile = isset($court['image']) ? $court['image'] : '';
             $hasImg  = !empty($imgFile) && file_exists(
-                $_SERVER['DOCUMENT_ROOT'].'/myproject/images/courts/'.$imgFile
+                $_SERVER['DOCUMENT_ROOT'].'/images/courts/'.$imgFile
             );
         ?>
         <div class="court-card">
           <?php if ($hasImg): ?>
-            <img src="/myproject/images/courts/<?= htmlspecialchars($imgFile) ?>"
+            <img src="/images/courts/<?= htmlspecialchars($imgFile) ?>"
                  style="width:100%;height:130px;object-fit:cover;"
                  alt="<?= htmlspecialchars($court['name']) ?>"/>
           <?php else: ?>
@@ -109,7 +109,7 @@ $initial = strtoupper(substr($_SESSION['name'], 0, 1));
             <div class="court-rate">
               LKR <?= number_format($court['rate_per_hour']) ?> / hour
             </div>
-            <a href="/myproject/booking.php?court_id=<?= $court['id'] ?>"
+            <a href="/booking.php?court_id=<?= $court['id'] ?>"
                class="btn btn-primary btn-full">Select Court</a>
           </div>
         </div>

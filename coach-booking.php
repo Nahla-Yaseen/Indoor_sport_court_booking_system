@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION['user_id'])) {
-    header("Location: /myproject/login.php"); exit();
+    header("Location: /login.php"); exit();
 }
 require_once __DIR__ . '/includes/db.php';
 
@@ -10,7 +10,7 @@ $coach_id = $_GET['coach_id'] ?? '';
 $stmt = $pdo->prepare("SELECT * FROM coaches WHERE id=? AND status='active'");
 $stmt->execute([$coach_id]);
 $coach = $stmt->fetch();
-if (!$coach) { header("Location: /myproject/coaches.php"); exit(); }
+if (!$coach) { header("Location: /coaches.php"); exit(); }
 
 // From booking page — all values passed via GET
 $fromBooking    = isset($_GET['from_booking']) && $_GET['from_booking'] == '1';
@@ -128,7 +128,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             // Redirect to payment with both booking IDs
             if ($cbId) {
-                header("Location: /myproject/payment.php?booking_id={$cbId}&coach_booking_id={$newCoachBookingId}");
+                header("Location: /payment.php?booking_id={$cbId}&coach_booking_id={$newCoachBookingId}");
                 exit();
             }
         }
@@ -146,7 +146,7 @@ $sportIcon = $coach['sport']==='Badminton' ? '🏸' :
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Confirm Coach Session – Adam Indoors</title>
-  <link rel="stylesheet" href="/myproject/css/style.css"/>
+  <link rel="stylesheet" href="/css/style.css"/>
   <style>
     .coach-info-bar {
       background: white; border: 1px solid var(--gray-200);
@@ -219,13 +219,13 @@ $sportIcon = $coach['sport']==='Badminton' ? '🏸' :
       </div>
     </div>
     <div class="usb-section">Menu</div>
-    <a href="/myproject/dashboard.php"         class="usb-link"><span class="usb-icon-sm">📊</span> Dashboard</a>
-    <a href="/myproject/about.php"             class="usb-link"><span class="usb-icon-sm">ℹ️</span> About Us</a>
-    <a href="/myproject/my-bookings.php"       class="usb-link"><span class="usb-icon-sm">📋</span> My Bookings</a>
-    <a href="/myproject/coaches.php"           class="usb-link active"><span class="usb-icon-sm">🎽</span> Coaches</a>
-    <a href="/myproject/my-coach-bookings.php" class="usb-link"><span class="usb-icon-sm">📝</span> My Coach Bookings</a>
+    <a href="/dashboard.php"         class="usb-link"><span class="usb-icon-sm">📊</span> Dashboard</a>
+    <a href="/about.php"             class="usb-link"><span class="usb-icon-sm">ℹ️</span> About Us</a>
+    <a href="/my-bookings.php"       class="usb-link"><span class="usb-icon-sm">📋</span> My Bookings</a>
+    <a href="/coaches.php"           class="usb-link active"><span class="usb-icon-sm">🎽</span> Coaches</a>
+    <a href="/my-coach-bookings.php" class="usb-link"><span class="usb-icon-sm">📝</span> My Coach Bookings</a>
     <div class="usb-section">Account</div>
-    <a href="/myproject/logout.php" class="usb-link logout-link"><span class="usb-icon-sm">🚪</span> Logout</a>
+    <a href="/logout.php" class="usb-link logout-link"><span class="usb-icon-sm">🚪</span> Logout</a>
     <div class="usb-bottom">© 2025 Adam Indoors</div>
   </div>
 
@@ -247,13 +247,13 @@ $sportIcon = $coach['sport']==='Badminton' ? '🏸' :
 
         <!-- COACH INFO BAR -->
         <?php
-        $imgPath = $_SERVER['DOCUMENT_ROOT'].'/myproject/images/coaches/'.($coach['image'] ?? '');
+        $imgPath = $_SERVER['DOCUMENT_ROOT'].'/images/coaches/'.($coach['image'] ?? '');
         $hasImg  = !empty($coach['image']) && file_exists($imgPath);
         ?>
         <div class="coach-info-bar">
           <div class="coach-av-lg">
             <?php if ($hasImg): ?>
-              <img src="/myproject/images/coaches/<?= htmlspecialchars($coach['image']) ?>" alt=""/>
+              <img src="/images/coaches/<?= htmlspecialchars($coach['image']) ?>" alt=""/>
             <?php else: ?>👤<?php endif; ?>
           </div>
           <div>
@@ -381,7 +381,7 @@ $sportIcon = $coach['sport']==='Badminton' ? '🏸' :
                 'court_price'     => $courtPrice,
             ]);
             ?>
-            <a href="/myproject/coaches.php?<?= $backParams ?>"
+            <a href="/coaches.php?<?= $backParams ?>"
                class="btn btn-outline">
               ← Choose Different Coach
             </a>

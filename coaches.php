@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION['user_id'])) {
-    header("Location: /myproject/login.php"); exit();
+    header("Location: /login.php"); exit();
 }
 require_once __DIR__ . '/includes/db.php';
 
@@ -35,7 +35,7 @@ $initial = strtoupper(substr($_SESSION['name'], 0, 1));
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Our Coaches – Adam Indoors</title>
-  <link rel="stylesheet" href="/myproject/css/style.css"/>
+  <link rel="stylesheet" href="/css/style.css"/>
   <style>
     .coaches-grid {
       display: grid;
@@ -141,13 +141,13 @@ $initial = strtoupper(substr($_SESSION['name'], 0, 1));
       </div>
     </div>
     <div class="usb-section">Menu</div>
-    <a href="/myproject/dashboard.php"         class="usb-link"><span class="usb-icon-sm">📊</span> Dashboard</a>
-    <a href="/myproject/about.php"             class="usb-link"><span class="usb-icon-sm">ℹ️</span> About Us</a>
-    <a href="/myproject/my-bookings.php"       class="usb-link"><span class="usb-icon-sm">📋</span> My Bookings</a>
-    <a href="/myproject/coaches.php"           class="usb-link active"><span class="usb-icon-sm">🎽</span> Coaches</a>
-    <a href="/myproject/my-coach-bookings.php" class="usb-link"><span class="usb-icon-sm">📝</span> My Coach Bookings</a>
+    <a href="/dashboard.php"         class="usb-link"><span class="usb-icon-sm">📊</span> Dashboard</a>
+    <a href="/about.php"             class="usb-link"><span class="usb-icon-sm">ℹ️</span> About Us</a>
+    <a href="/my-bookings.php"       class="usb-link"><span class="usb-icon-sm">📋</span> My Bookings</a>
+    <a href="/coaches.php"           class="usb-link active"><span class="usb-icon-sm">🎽</span> Coaches</a>
+    <a href="/my-coach-bookings.php" class="usb-link"><span class="usb-icon-sm">📝</span> My Coach Bookings</a>
     <div class="usb-section">Account</div>
-    <a href="/myproject/logout.php" class="usb-link logout-link"><span class="usb-icon-sm">🚪</span> Logout</a>
+    <a href="/logout.php" class="usb-link logout-link"><span class="usb-icon-sm">🚪</span> Logout</a>
     <div class="usb-bottom">© 2025 Adam Indoors</div>
   </div>
 
@@ -186,7 +186,7 @@ $initial = strtoupper(substr($_SESSION['name'], 0, 1));
           </p>
           <p style="margin-top:4px;">
             Or
-            <a href="/myproject/payment.php?booking_id=<?= $bookingId ?>"
+            <a href="/payment.php?booking_id=<?= $bookingId ?>"
                style="color:var(--accent);font-weight:600;">
               skip and pay now →
             </a>
@@ -206,13 +206,13 @@ $initial = strtoupper(substr($_SESSION['name'], 0, 1));
           </div>
           <div class="coaches-grid">
             <?php foreach ($sportCoaches as $coach):
-              $imgPath = $_SERVER['DOCUMENT_ROOT'].'/myproject/images/coaches/'.($coach['image']??'');
+              $imgPath = $_SERVER['DOCUMENT_ROOT'].'/images/coaches/'.($coach['image']??'');
               $hasImg  = !empty($coach['image']) && file_exists($imgPath);
             ?>
             <div class="coach-card">
               <div class="coach-photo">
                 <?php if ($hasImg): ?>
-                  <img src="/myproject/images/coaches/<?= htmlspecialchars($coach['image']) ?>" alt=""/>
+                  <img src="/images/coaches/<?= htmlspecialchars($coach['image']) ?>" alt=""/>
                 <?php else: ?>👤<?php endif; ?>
                 <span class="coach-id-badge"><?= htmlspecialchars($coach['id']) ?></span>
                 <span class="coach-sport-badge"><?= htmlspecialchars($coach['sport']) ?></span>
@@ -237,7 +237,7 @@ $initial = strtoupper(substr($_SESSION['name'], 0, 1));
                 <?php
                 // Only show Book button if user came from the booking flow
                 if ($fromBooking && $bookingId):
-                  $bookUrl = '/myproject/coach-booking.php?coach_id='.urlencode($coach['id'])
+                  $bookUrl = '/coach-booking.php?coach_id='.urlencode($coach['id'])
                            . '&from_booking=1'
                            . '&court_booking_id='.$bookingId
                            . '&date='.urlencode($bookingDate)

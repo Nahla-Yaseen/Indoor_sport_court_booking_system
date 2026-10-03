@@ -4,7 +4,7 @@ require_once '../includes/db.php';
 requireAdmin();
 
 $error = $success = '';
-$uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/myproject/images/courts/';
+$uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/images/courts/';
 
 if (isset($_POST['action']) && $_POST['action'] === 'add') {
     $name  = trim($_POST['name']);
@@ -155,7 +155,7 @@ $courts = $pdo->query("SELECT * FROM courts ORDER BY id DESC")->fetchAll();
                   <tr>
                     <td>
                       <?php if (!empty($c['image']) && file_exists($uploadDir.$c['image'])): ?>
-                        <img src="/myproject/images/courts/<?= htmlspecialchars($c['image']) ?>" class="court-thumb" alt=""/>
+                        <img src="/images/courts/<?= htmlspecialchars($c['image']) ?>" class="court-thumb" alt=""/>
                       <?php else: ?>
                         <div style="width:52px;height:40px;background:var(--primary-soft);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:18px;">🏸</div>
                       <?php endif; ?>
@@ -227,7 +227,7 @@ function openEdit(c) {
     document.getElementById('editRate').value   = c.rate_per_hour;
     document.getElementById('editStatus').value = c.status;
     const img = document.getElementById('editCurrentImg');
-    if (c.image) { img.src = '/myproject/images/courts/'+c.image; img.style.display='block'; }
+    if (c.image) { img.src = '/images/courts/'+c.image; img.style.display='block'; }
     else           { img.style.display='none'; }
     document.getElementById('editPreview').style.display = 'none';
     document.getElementById('editModal').classList.add('open');

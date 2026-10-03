@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION['user_id'])) {
-    header("Location: /myproject/login.php"); exit();
+    header("Location: /login.php"); exit();
 }
 require_once __DIR__ . '/includes/db.php';
 
@@ -43,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cancel_id'])) {
             ")->execute([$refundAmount, $_SESSION['user_id']]);
         }
     }
-    header("Location: /myproject/my-bookings.php"); exit();
+    header("Location: /my-bookings.php"); exit();
 }
 
 $filter  = $_GET['filter'] ?? 'All';
@@ -84,7 +84,7 @@ $initial = strtoupper(substr($_SESSION['name'], 0, 1));
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>My Bookings – Adam Indoors</title>
-  <link rel="stylesheet" href="/myproject/css/style.css"/>
+  <link rel="stylesheet" href="/css/style.css"/>
   <style>
     .pay-btn {
       display: block;
@@ -157,13 +157,13 @@ $initial = strtoupper(substr($_SESSION['name'], 0, 1));
       <div><strong><?= htmlspecialchars($_SESSION['name']) ?></strong><small>Member</small></div>
     </div>
     <div class="usb-section">Menu</div>
-    <a href="/myproject/dashboard.php"         class="usb-link"><span class="usb-icon-sm">📊</span> Dashboard</a>
-    <a href="/myproject/about.php"             class="usb-link"><span class="usb-icon-sm">ℹ️</span> About Us</a>
-    <a href="/myproject/my-bookings.php"       class="usb-link active"><span class="usb-icon-sm">📋</span> My Bookings</a>
-    <a href="/myproject/coaches.php"           class="usb-link"><span class="usb-icon-sm">🎽</span> Coaches</a>
-    <a href="/myproject/my-coach-bookings.php" class="usb-link"><span class="usb-icon-sm">📝</span> My Coach Bookings</a>
+    <a href="/dashboard.php"         class="usb-link"><span class="usb-icon-sm">📊</span> Dashboard</a>
+    <a href="/about.php"             class="usb-link"><span class="usb-icon-sm">ℹ️</span> About Us</a>
+    <a href="/my-bookings.php"       class="usb-link active"><span class="usb-icon-sm">📋</span> My Bookings</a>
+    <a href="/coaches.php"           class="usb-link"><span class="usb-icon-sm">🎽</span> Coaches</a>
+    <a href="/my-coach-bookings.php" class="usb-link"><span class="usb-icon-sm">📝</span> My Coach Bookings</a>
     <div class="usb-section">Account</div>
-    <a href="/myproject/logout.php" class="usb-link logout-link"><span class="usb-icon-sm">🚪</span> Logout</a>
+    <a href="/logout.php" class="usb-link logout-link"><span class="usb-icon-sm">🚪</span> Logout</a>
     <div class="usb-bottom">© 2025 Adam Indoors</div>
   </div>
 
@@ -335,7 +335,7 @@ $initial = strtoupper(substr($_SESSION['name'], 0, 1));
                 </td>
                 <td>
                   <?php if ($b['status'] === 'Confirmed' && !$isPaid): ?>
-                    <a href="/myproject/payment.php?booking_id=<?= $b['id'] ?>"
+                    <a href="/payment.php?booking_id=<?= $b['id'] ?>"
                        class="pay-btn">💳 Pay Now</a>
                   <?php endif; ?>
                   <?php if ($b['status'] === 'Confirmed'): ?>
@@ -359,7 +359,7 @@ $initial = strtoupper(substr($_SESSION['name'], 0, 1));
       </div>
 
       <div style="margin-top:20px;">
-        <a href="/myproject/dashboard.php" class="btn btn-outline">← Back to Dashboard</a>
+        <a href="/dashboard.php" class="btn btn-outline">← Back to Dashboard</a>
       </div>
     </div>
   </div>

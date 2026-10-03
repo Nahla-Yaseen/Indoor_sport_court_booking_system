@@ -4,7 +4,7 @@ require_once '../includes/db.php';
 requireAdmin();
 
 $error = $success = '';
-$uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/myproject/images/coaches/';
+$uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/images/coaches/';
 
 if (isset($_POST['action']) && $_POST['action'] === 'add') {
     $name  = trim($_POST['name']);
@@ -206,7 +206,7 @@ $coaches = $pdo->query("SELECT * FROM coaches ORDER BY sport, name")->fetchAll()
                   <tr>
                     <td>
                       <?php if (!empty($c['image']) && file_exists($uploadDir.$c['image'])): ?>
-                        <img src="/myproject/images/coaches/<?= htmlspecialchars($c['image']) ?>" class="coach-thumb" alt=""/>
+                        <img src="/images/coaches/<?= htmlspecialchars($c['image']) ?>" class="coach-thumb" alt=""/>
                       <?php else: ?>
                         <div style="width:48px;height:48px;border-radius:50%;background:var(--primary-soft);display:flex;align-items:center;justify-content:center;font-size:20px;">👤</div>
                       <?php endif; ?>
@@ -317,7 +317,7 @@ function openEdit(c) {
     document.getElementById('editDesc').value   = c.description  || '';
     document.getElementById('editStatus').value = c.status || 'active';
     const img = document.getElementById('editCurrentImg');
-    if (c.image) { img.src = '/myproject/images/coaches/'+c.image; img.style.display='block'; }
+    if (c.image) { img.src = '/images/coaches/'+c.image; img.style.display='block'; }
     else           { img.style.display='none'; }
     document.getElementById('editPreview').style.display = 'none';
     document.getElementById('editModal').classList.add('open');

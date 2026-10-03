@@ -9,7 +9,7 @@ require 'PHPMailer/src/PHPMailer.php';
 require 'PHPMailer/src/SMTP.php';
 
 if (!isset($_SESSION['user_id'])) {
-    header("Location: /myproject/login.php"); exit();
+    header("Location: /login.php"); exit();
 }
 require_once __DIR__ . '/includes/db.php';
 
@@ -22,7 +22,7 @@ $walletBal = floatval($uStmt->fetchColumn() ?? 0);
 $stmt = $pdo->prepare("SELECT * FROM courts WHERE id=? AND status='active'");
 $stmt->execute([$court_id]);
 $court = $stmt->fetch();
-if (!$court) { header("Location: /myproject/dashboard.php"); exit(); }
+if (!$court) { header("Location: /dashboard.php"); exit(); }
 
 $pkgStmt = $pdo->prepare("SELECT * FROM packages WHERE court_id=? AND status='active' ORDER BY duration_hours ASC");
 $pkgStmt->execute([$court_id]);
@@ -220,11 +220,11 @@ if ($need_coach === 'yes') {
         'duration'     => $slotCount,
         'court_price'  => $total_price,
     ]);
-    header("Location: /myproject/coaches.php?$params");
+    header("Location: /coaches.php?$params");
     exit();
 } else {
     // Go directly to payment
-    header("Location: /myproject/payment.php?booking_id=" . $newBookingId);
+    header("Location: /payment.php?booking_id=" . $newBookingId);
     exit();
 }
                 
@@ -254,7 +254,7 @@ if (isset($_GET['ajax_slots']) && isset($_GET['date'])) {
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Book <?= htmlspecialchars($court['name']) ?> – Adam Indoors</title>
-  <link rel="stylesheet" href="/myproject/css/style.css"/>
+  <link rel="stylesheet" href="/css/style.css"/>
   <style>
     /* TIME SLOT GRID */
     .slots-grid {
@@ -425,13 +425,13 @@ if (isset($_GET['ajax_slots']) && isset($_GET['date'])) {
       </div>
     </div>
     <div class="usb-section">Menu</div>
-    <a href="/myproject/dashboard.php"         class="usb-link"><span class="usb-icon-sm">📊</span> Dashboard</a>
-    <a href="/myproject/about.php"             class="usb-link"><span class="usb-icon-sm">ℹ️</span> About Us</a>
-    <a href="/myproject/my-bookings.php"       class="usb-link"><span class="usb-icon-sm">📋</span> My Bookings</a>
-    <a href="/myproject/coaches.php"           class="usb-link"><span class="usb-icon-sm">🎽</span> Coaches</a>
-    <a href="/myproject/my-coach-bookings.php" class="usb-link"><span class="usb-icon-sm">📝</span> My Coach Bookings</a>
+    <a href="/dashboard.php"         class="usb-link"><span class="usb-icon-sm">📊</span> Dashboard</a>
+    <a href="/about.php"             class="usb-link"><span class="usb-icon-sm">ℹ️</span> About Us</a>
+    <a href="/my-bookings.php"       class="usb-link"><span class="usb-icon-sm">📋</span> My Bookings</a>
+    <a href="/coaches.php"           class="usb-link"><span class="usb-icon-sm">🎽</span> Coaches</a>
+    <a href="/my-coach-bookings.php" class="usb-link"><span class="usb-icon-sm">📝</span> My Coach Bookings</a>
     <div class="usb-section">Account</div>
-    <a href="/myproject/logout.php" class="usb-link logout-link"><span class="usb-icon-sm">🚪</span> Logout</a>
+    <a href="/logout.php" class="usb-link logout-link"><span class="usb-icon-sm">🚪</span> Logout</a>
     <div class="usb-bottom">© 2025 Adam Indoors</div>
   </div>
 
@@ -480,8 +480,8 @@ if (isset($_GET['ajax_slots']) && isset($_GET['date'])) {
             <div class="ssb-status" style="background:var(--primary-soft);color:var(--primary);">✅ Status: Confirmed</div>
           </div>
           <div class="ssb-actions">
-            <a href="/myproject/my-bookings.php" class="btn btn-primary">📋 View My Bookings</a>
-            <a href="/myproject/dashboard.php"   class="btn btn-outline">🏠 Dashboard</a>
+            <a href="/my-bookings.php" class="btn btn-primary">📋 View My Bookings</a>
+            <a href="/dashboard.php"   class="btn btn-outline">🏠 Dashboard</a>
           </div>
         </div>
       </div>
@@ -800,7 +800,7 @@ function goBack() {
 
 // ======= FETCH TAKEN SLOTS =======
 async function fetchTaken(date) {
-    const res  = await fetch(`/myproject/booking.php?court_id=${COURT_ID}&ajax_slots=1&date=${date}`);
+    const res  = await fetch(`/booking.php?court_id=${COURT_ID}&ajax_slots=1&date=${date}`);
     const data = await res.json();
     return data.taken || [];
 }

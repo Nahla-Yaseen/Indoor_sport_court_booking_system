@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION['user_id'])) {
-    header("Location: /myproject/login.php"); exit();
+    header("Location: /login.php"); exit();
 }
 require_once __DIR__ . '/includes/db.php';
 
@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cancel_id'])) {
         UPDATE coach_bookings SET status='Cancelled'
         WHERE id=? AND user_id=? AND status IN ('Pending','Confirmed')
     ")->execute([intval($_POST['cancel_id']), $_SESSION['user_id']]);
-    header("Location: /myproject/my-coach-bookings.php"); exit();
+    header("Location: /my-coach-bookings.php"); exit();
 }
 
 $filter  = $_GET['filter'] ?? 'All';
@@ -46,7 +46,7 @@ $initial  = strtoupper(substr($_SESSION['name'], 0, 1));
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>My Coach Sessions – Adam Indoors</title>
-  <link rel="stylesheet" href="/myproject/css/style.css"/>
+  <link rel="stylesheet" href="/css/style.css"/>
 </head>
 <body>
 <div class="user-wrapper">
@@ -64,13 +64,13 @@ $initial  = strtoupper(substr($_SESSION['name'], 0, 1));
       </div>
     </div>
     <div class="usb-section">Menu</div>
-    <a href="/myproject/dashboard.php"         class="usb-link"><span class="usb-icon-sm">📊</span> Dashboard</a>
-    <a href="/myproject/about.php"             class="usb-link"><span class="usb-icon-sm">ℹ️</span> About Us</a>
-    <a href="/myproject/coaches.php"           class="usb-link"><span class="usb-icon-sm">🏅</span> Coaches</a>
-    <a href="/myproject/my-bookings.php"       class="usb-link"><span class="usb-icon-sm">📋</span> My Bookings</a>
-    <a href="/myproject/my-coach-bookings.php" class="usb-link active"><span class="usb-icon-sm">🎯</span> Coach Sessions</a>
+    <a href="/dashboard.php"         class="usb-link"><span class="usb-icon-sm">📊</span> Dashboard</a>
+    <a href="/about.php"             class="usb-link"><span class="usb-icon-sm">ℹ️</span> About Us</a>
+    <a href="/coaches.php"           class="usb-link"><span class="usb-icon-sm">🏅</span> Coaches</a>
+    <a href="/my-bookings.php"       class="usb-link"><span class="usb-icon-sm">📋</span> My Bookings</a>
+    <a href="/my-coach-bookings.php" class="usb-link active"><span class="usb-icon-sm">🎯</span> Coach Sessions</a>
     <div class="usb-section">Account</div>
-    <a href="/myproject/logout.php" class="usb-link logout-link"><span class="usb-icon-sm">🚪</span> Logout</a>
+    <a href="/logout.php" class="usb-link logout-link"><span class="usb-icon-sm">🚪</span> Logout</a>
     <div class="usb-bottom">© 2025 Adam Indoors</div>
   </div>
 
@@ -118,7 +118,7 @@ $initial  = strtoupper(substr($_SESSION['name'], 0, 1));
               <tr>
                 <td colspan="9" style="text-align:center;color:var(--text-muted);padding:40px;">
                   No coach sessions found.
-                  <a href="/myproject/coaches.php" style="color:var(--primary);font-weight:600;">Browse coaches →</a>
+                  <a href="/coaches.php" style="color:var(--primary);font-weight:600;">Browse coaches →</a>
                 </td>
               </tr>
             <?php else: ?>
@@ -153,7 +153,7 @@ $initial  = strtoupper(substr($_SESSION['name'], 0, 1));
       </div>
 
       <div style="margin-top:20px;">
-        <a href="/myproject/coaches.php" class="btn btn-outline">← Browse Coaches</a>
+        <a href="/coaches.php" class="btn btn-outline">← Browse Coaches</a>
       </div>
     </div>
   </div>
