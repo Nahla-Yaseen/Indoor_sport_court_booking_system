@@ -11,4 +11,4 @@ define('PAYHERE_CHECKOUT_URL',
 );
 
 // Application base URL
-define('APP_BASE_URL', getenv('APP_BASE_URL') ?: 'http://localhost/myproject');
+define('APP_BASE_URL', getenv('APP_BASE_URL') ?: 'https://indoorsportcourtbookingsystem-nq9c-git-main-mohamedulm.vercel.app');
