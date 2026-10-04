@@ -11,4 +11,7 @@ define('PAYHERE_CHECKOUT_URL',
 );
 
 // Application base URL
-define('APP_BASE_URL', getenv('APP_BASE_URL') ?: 'https://indoorsportcourtbookingsystem-nq9c-git-main-mohamedulm.vercel.app');
+// Dynamically detect the base URL from the current request
+$_detected_host = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? 'https' : 'http')
+    . '://' . ($_SERVER['HTTP_HOST'] ?? 'localhost');
+define('APP_BASE_URL', getenv('APP_BASE_URL') ?: $_detected_host);
