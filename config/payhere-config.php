@@ -14,4 +14,4 @@ define('PAYHERE_CHECKOUT_URL',
 // Dynamically detect the base URL from the current request
 $_detected_host = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? 'https' : 'http')
     . '://' . ($_SERVER['HTTP_HOST'] ?? 'localhost');
-define('APP_BASE_URL', getenv('APP_BASE_URL') ?: $_detected_host);
+define('APP_BASE_URL', $_detected_host);
