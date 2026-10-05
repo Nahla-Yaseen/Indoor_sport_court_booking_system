@@ -81,7 +81,7 @@ if ($order_id) {
         // Fallback: update payment status to Paid since return URL is reached
         $pdo->prepare("
             UPDATE payments
-            SET status='Paid', payment_method='PayHere', paid_at=NOW()
+            SET status='Paid', payment_method='Stripe', paid_at=NOW()
             WHERE id=?
         ")->execute([$payment['id']]);
 
@@ -242,7 +242,7 @@ $initial = strtoupper(substr($_SESSION['name'], 0, 1));
           <div class="sb-icon">⏳</div>
           <h2>Payment Received — Confirming...</h2>
           <p>
-            We are confirming your payment with PayHere.
+            We are confirming your payment with Stripe.
             This usually takes a few seconds.<br/><br/>
             Please click <strong>View My Bookings</strong> below
             and refresh after a few seconds to see the updated status.

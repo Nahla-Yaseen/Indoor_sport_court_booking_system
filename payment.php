@@ -217,14 +217,56 @@ $lastName  = $nameParts[1] ?? $nameParts[0];
 $amountFormatted = number_format($totalAmount, 2, '.', '');
 $currency = 'LKR';
 
-// PayHere hash
-$hash = strtoupper(md5(
-    PAYHERE_MERCHANT_ID .
-    $order_id .
-    $amountFormatted .
-    $currency .
-    strtoupper(md5(PAYHERE_MERCHANT_SECRET))
-));
+// Handle Stripe Checkout creation when user clicks "Pay"
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['pay_with_stripe'])) {
+    
+    $stripe_secret = STRIPE_SECRET_KEY;
+    
+    // Stripe expects amount in smallest currency unit (cents/cents)
+    $amount_in_cents = round($totalAmount * 100);
+
+    // Build the POST data for Stripe
+    $postData = [
+        'payment_method_types' => ['card'],
+        'line_items' => [
+            [
+                'price_data' => [
+                    'currency' => 'lkr',
+                    'product_data' => [
+                        'name' => 'Court Booking #' . $booking_id . ($coachBooking ? ' + Coach' : ''),
+                    ],
+                    'unit_amount' => $amount_in_cents,
+                ],
+                'quantity' => 1,
+            ],
+        ],
+        'mode' => 'payment',
+        'success_url' => APP_BASE_URL . '/payment-return.php?order_id=' . urlencode($order_id),
+        'cancel_url' => APP_BASE_URL . '/payment-cancel.php?order_id=' . urlencode($order_id),
+        'client_reference_id' => $order_id,
+        'customer_email' => $user['email']
+    ];
+
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, "https://api.stripe.com/v1/checkout/sessions");
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($ch, CURLOPT_POST, 1);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($postData));
+    curl_setopt($ch, CURLOPT_USERPWD, $stripe_secret . ":");
+    
+    $response = curl_exec($ch);
+    $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+    
+    if ($http_status === 200) {
+        $session = json_decode($response, true);
+        header("Location: " . $session['url']);
+        exit();
+    } else {
+        $error = json_decode($response, true);
+        $stripe_error = $error['error']['message'] ?? 'Unknown Stripe Error';
+    }
+}
 
 $initial = strtoupper(substr($user['name'], 0, 1));
 $slots   = json_decode($booking['selected_slots'] ?? '[]', true);
@@ -273,28 +315,26 @@ $slots   = json_decode($booking['selected_slots'] ?? '[]', true);
       background: var(--primary-soft);
       border-top: 2px solid var(--primary);
     }
-    .payhere-btn {
+    .stripe-btn {
       width: 100%; padding: 16px;
-      background: linear-gradient(135deg, #1b5e20 0%, #43a047 100%);
+      background: #635bff;
       color: white; font-size: 16px; font-weight: 700;
       border: none; border-radius: var(--r-md);
       cursor: pointer; font-family: 'Poppins', sans-serif;
       transition: all 0.2s; display: flex;
       align-items: center; justify-content: center; gap: 10px;
     }
-    .payhere-btn:hover { opacity: 0.92; transform: translateY(-1px); }
+    .stripe-btn:hover { opacity: 0.92; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(99,91,255,0.3); }
     .secure-badge {
       text-align: center; font-size: 12px;
       color: var(--text-muted); margin-top: 12px;
       display: flex; align-items: center;
       justify-content: center; gap: 6px;
     }
-    .sandbox-notice {
-      background: #fff3e0; border: 1.5px solid #ff8f00;
-      border-radius: var(--r-sm); padding: 10px 14px;
-      font-size: 12px; color: #e65100; font-weight: 600;
-      margin-bottom: 18px; display: flex;
-      align-items: center; gap: 8px;
+    .error-notice {
+      background: #ffebee; border: 1px solid #ef5350;
+      border-radius: var(--r-sm); padding: 12px;
+      font-size: 13px; color: #c62828; margin-bottom: 20px;
     }
   </style>
 </head>
@@ -335,13 +375,14 @@ $slots   = json_decode($booking['selected_slots'] ?? '[]', true);
 
         <div class="page-header" style="border-radius:var(--r-md);margin-bottom:22px;">
           <h1>💳 Complete Your Payment</h1>
-          <p>Secure checkout powered by PayHere</p>
+          <p>Secure checkout powered by Stripe</p>
         </div>
 
-        <!-- SANDBOX NOTICE -->
-        <div class="sandbox-notice">
-          🧪 SANDBOX MODE — Use PayHere test card details. No real charge.
-        </div>
+        <?php if (isset($stripe_error)): ?>
+          <div class="error-notice">
+            <strong>Payment Error:</strong> <?= htmlspecialchars($stripe_error) ?>
+          </div>
+        <?php endif; ?>
 
         <!-- PAYMENT SUMMARY -->
         <div class="pay-summary">
@@ -419,54 +460,20 @@ $slots   = json_decode($booking['selected_slots'] ?? '[]', true);
           </div>
         </div>
 
-        <!-- PAYHERE FORM -->
-        <form method="POST" action="<?= PAYHERE_CHECKOUT_URL ?>" id="payhereForm">
-          <input type="hidden" name="merchant_id" value="<?= PAYHERE_MERCHANT_ID ?>"/>
-          <input type="hidden" name="return_url"
-                 value="<?= APP_BASE_URL ?>/payment-return.php?order_id=<?= urlencode($order_id) ?>"/>
-          <input type="hidden" name="cancel_url"
-                 value="<?= APP_BASE_URL ?>/payment-cancel.php?order_id=<?= urlencode($order_id) ?>"/>
-          <input type="hidden" name="notify_url"
-                 value="<?= APP_BASE_URL ?>/payhere-notify.php"/>
-          <input type="hidden" name="order_id"   value="<?= htmlspecialchars($order_id) ?>"/>
-          <input type="hidden" name="items"
-                 value="Court Booking #<?= $booking_id ?><?= $coachBooking?' + Coach Session':'' ?>"/>
-          <input type="hidden" name="currency"   value="<?= $currency ?>"/>
-          <input type="hidden" name="amount"     value="<?= $amountFormatted ?>"/>
-          <input type="hidden" name="first_name" value="<?= htmlspecialchars($firstName) ?>"/>
-          <input type="hidden" name="last_name"  value="<?= htmlspecialchars($lastName) ?>"/>
-          <input type="hidden" name="email"      value="<?= htmlspecialchars($user['email']) ?>"/>
-          <input type="hidden" name="phone"      value="<?= htmlspecialchars($user['phone'] ?? '0770000000') ?>"/>
-          <input type="hidden" name="address"    value="Kurunegala"/>
-          <input type="hidden" name="city"       value="Kurunegala"/>
-          <input type="hidden" name="country"    value="Sri Lanka"/>
-          <input type="hidden" name="hash"       value="<?= $hash ?>"/>
-
-          <button type="submit" class="payhere-btn">
+        <!-- STRIPE FORM -->
+        <form method="POST" action="">
+          <input type="hidden" name="pay_with_stripe" value="1">
+          <button type="submit" class="stripe-btn">
             <span>💳</span>
-            <span>Pay LKR <?= number_format($totalAmount, 2) ?> with PayHere</span>
+            <span>Pay LKR <?= number_format($totalAmount, 2) ?> with Stripe</span>
           </button>
         </form>
 
         <div class="secure-badge">
-          🔒 Secured by PayHere Payment Gateway
+          🔒 Secured by Stripe
         </div>
 
-        <!-- SANDBOX TEST CARD INFO -->
-        <div style="background:var(--gray-100);border-radius:var(--r-md);
-                    padding:16px 18px;margin-top:20px;font-size:12px;">
-          <div style="font-weight:700;color:var(--primary);margin-bottom:10px;">
-            🧪 Sandbox Test Card Details
-          </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;color:var(--text-muted);">
-            <div><strong>Card Number:</strong></div><div>4916217501611292</div>
-            <div><strong>Expiry:</strong></div><div>12/25</div>
-            <div><strong>CVV:</strong></div><div>123</div>
-            <div><strong>Card Holder:</strong></div><div>Test User</div>
-          </div>
-        </div>
-
-        <div style="text-align:center;margin-top:16px;">
+        <div style="text-align:center;margin-top:24px;">
           <a href="/my-bookings.php"
              style="font-size:12px;color:var(--text-muted);">
             ← Cancel and go back to My Bookings

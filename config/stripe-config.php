@@ -1,17 +1,8 @@
 <?php
-define('PAYHERE_MODE', 'sandbox');
-
-define('PAYHERE_MERCHANT_ID',     getenv('PAYHERE_MERCHANT_ID')     ?: '1236830');
-define('PAYHERE_MERCHANT_SECRET', getenv('PAYHERE_MERCHANT_SECRET') ?: 'MTEyOTAyMjI1MTQyODgxODQ4MzMzNDMyOTQ0OTIwMTM3MTE5MTEx');
-
-define('PAYHERE_CHECKOUT_URL',
-    PAYHERE_MODE === 'sandbox'
-        ? 'https://sandbox.payhere.lk/pay/checkout'
-        : 'https://www.payhere.lk/pay/checkout'
-);
+define('STRIPE_SECRET_KEY', getenv('STRIPE_SECRET_KEY') ?: 'sk_test_...put_your_key_here...');
+define('STRIPE_WEBHOOK_SECRET', getenv('STRIPE_WEBHOOK_SECRET') ?: 'whsec_...put_your_webhook_secret_here...');
 
 // Application base URL
-// Dynamically detect the base URL from the current request
 $is_https = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https');
 $_detected_host = ($is_https ? 'https' : 'http') . '://' . ($_SERVER['HTTP_HOST'] ?? 'localhost');
 
