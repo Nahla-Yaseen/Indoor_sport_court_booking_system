@@ -3,7 +3,7 @@ session_start();
 if (!isset($_SESSION['user_id'])) {
     header("Location: /login.php"); exit();
 }
-require_once __DIR__ . '/config/payhere-config.php';
+require_once __DIR__ . '/config/stripe-config.php';
 
 require_once __DIR__ . '/includes/db.php';
 
@@ -119,7 +119,7 @@ if ($payment) {
     $pdo->prepare("
         INSERT INTO payments
         (booking_id, coach_booking_id, user_id, order_id, amount, wallet_applied, payment_method, status)
-        VALUES (?, ?, ?, ?, ?, ?, 'PayHere', 'Pending')
+        VALUES (?, ?, ?, ?, ?, ?, 'Stripe', 'Pending')
     ")->execute([
         $booking_id,
         $coach_booking_id ?: null,
