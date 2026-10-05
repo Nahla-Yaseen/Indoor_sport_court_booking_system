@@ -249,7 +249,7 @@ foreach ($slots as $sl) {
           <div class="dsc <?= $class ?>">
             <div>
               <div style="font-size:10px;margin-bottom:3px;"><?= $icon ?> <?= $status ?></div>
-              <div class="dsc-label"><?= htmlspecialchars($slot['slot_label']) ?></div>
+              <div class="dsc-label"><?= htmlspecialchars(str_replace('???', '-', $slot['slot_label'])) ?></div>
             </div>
             <?php if ($isBlocked):
               $bId = null;
@@ -297,7 +297,7 @@ foreach ($slots as $sl) {
                     if ($isTaken) continue;
                   ?>
                     <option value="<?= $slot['slot_time'] ?>">
-                      <?= htmlspecialchars($slot['slot_label']) ?>
+                      <?= htmlspecialchars(str_replace('???', '-', $slot['slot_label'])) ?>
                     </option>
                   <?php endforeach; ?>
                 </select>

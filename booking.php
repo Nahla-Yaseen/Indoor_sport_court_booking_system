@@ -807,14 +807,14 @@ async function fetchTaken(date) {
 
 // ======= FORMAT SLOT LABEL =======
 function fmtSlot(t) {
-    if (SLOT_LABELS[t]) return SLOT_LABELS[t];
+    if (SLOT_LABELS[t]) return SLOT_LABELS[t].replace(/\?+/g, '-');
     const h = parseInt(t.split(':')[0]);
     const ap1 = h >= 12 ? 'PM' : 'AM';
     const h12  = h > 12 ? h-12 : (h===0?12:h);
     const h2   = h+1;
     const ap2  = h2 >= 12 ? 'PM' : 'AM';
     const h212 = h2 > 12 ? h2-12 : (h2===0?12:h2);
-    return `${h12}:00 ${ap1} – ${h212}:00 ${ap2}`;
+    return `${h12}:00 ${ap1} - ${h212}:00 ${ap2}`;
 }
 
 // ======= TIME-BASED =======

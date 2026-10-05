@@ -222,7 +222,7 @@ $initial = strtoupper(substr($_SESSION['name'], 0, 1));
                 <div class="coach-exp">⭐ <?= $coach['experience_years'] ?> years experience</div>
                 <div class="coach-desc"><?= htmlspecialchars($coach['description']) ?></div>
                 <?php if ($coach['availability']): ?>
-                  <div class="coach-avail">📅 <?= htmlspecialchars($coach['availability']) ?></div>
+                  <div class="coach-avail">📅 <?= htmlspecialchars(str_replace('???', ' - ', $coach['availability'])) ?></div>
                 <?php endif; ?>
                 <div class="coach-rate">LKR <?= number_format($coach['hourly_rate']) ?> / hour</div>
                 <div class="coach-contacts">
