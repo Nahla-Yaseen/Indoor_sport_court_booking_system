@@ -1,4 +1,5 @@
 <?php
+ob_start();
 session_start();
 if (!isset($_SESSION['user_id'])) {
     header("Location: /login.php"); exit();
@@ -256,7 +257,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['pay_with_stripe'])) {
     
     $response = curl_exec($ch);
     $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    curl_close($ch);
+    unset($ch);
     
     if ($http_status === 200) {
         $session = json_decode($response, true);
