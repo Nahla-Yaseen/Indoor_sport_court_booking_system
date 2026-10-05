@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/config/payhere-config.php';
+require_once dirname(__DIR__) . '/config/payhere-config.php';
 
 $order_id = 'TEST-' . time();
 $amount = '150.00';
